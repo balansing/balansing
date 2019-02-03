@@ -5,8 +5,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.{HashPartitioner, SparkConf, SparkContext}
 
 import scala.collection.mutable
+import scala.util.Random
 
 object BalanSiNG {
+
+  var rand: Random = _
 
   val logger: Logger = Logger.getLogger(getClass)
 
@@ -26,6 +29,9 @@ object BalanSiNG {
     val alpha = args(8).toDouble
     val noise = args(9).toDouble
     val output = args(10)
+    val randSeed = args(11).toInt
+
+    rand = new Random(randSeed)
 
     logger.info(f"level: $level, numEdges: $numEdges, numTasks: $numTasks, " +
       f"(a,b,c,d): $abcd")
@@ -34,7 +40,7 @@ object BalanSiNG {
 
     val sc = new SparkContext(conf)
 
-    run(level, numEdges, numTasks, abcd, split_ratio, alpha, noise, sc)
+    run(level, numEdges, numTasks, abcd, split_ratio, alpha, noise, sc, randSeed)
       .map { case (u, v, p) => u + "\t" + v + "\t" + (if (p) "+1" else "-1") }
       .saveAsTextFile(output)
 
@@ -56,7 +62,9 @@ object BalanSiNG {
     * @return an RDD containing edges of the generated graph
     */
   def run(level: Int, numEdges: Long, numTasks: Int,
-          abcd: (Double, Double, Double, Double), split_ratio: Double, alpha: Double, noise: Double, sc: SparkContext): RDD[(Long, Long, Boolean)] = {
+          abcd: (Double, Double, Double, Double), split_ratio: Double, alpha: Double, noise: Double, sc: SparkContext, randSeed: Int): RDD[(Long, Long, Boolean)] = {
+
+    rand = new Random(randSeed)
 
     val regionQueue = new mutable.PriorityQueue[Region]()(Ordering.by(regionOrder))
     val regionSlotQueue = new mutable.PriorityQueue[RegionSlot]()(Ordering.by(regionSlotOrder))
@@ -68,7 +76,8 @@ object BalanSiNG {
 
     val numNodes = 1L << (level + 1)
 
-    val noiseList = sc.broadcast[Array[Double]]((0L to level).map(_ => Math.random() * 2 * noise - noise).toArray)
+    //val noiseList = sc.broadcast[Array[Double]]((0L to level).map(_ => Math.random() * 2 * noise - noise).toArray)
+    val noiseList = sc.broadcast[Array[Double]]((0L to level).map(_ => rand.nextDouble * 2 * noise - noise).toArray)
 
     regionQueue.enqueue(Region(0, 0, numNodes - 1, numNodes - 1, numEdges, level, 1.0))
 

@@ -50,7 +50,8 @@ class BalanSiNGSingle(abcd: (Double, Double, Double, Double), gamma: Double, alp
 
     var plusProb = region.plus_joint
 
-    var p = Math.random
+    //var p = Math.random
+    var p = BalanSiNG.rand.nextDouble
 
     for (l <- region.level to 0 by -1) {
 
@@ -80,7 +81,8 @@ class BalanSiNGSingle(abcd: (Double, Double, Double, Double), gamma: Double, alp
     }
 
     // stochastic sign decision
-    if (Math.random < plusProb) (x, y, true)
+    // if (Math.random < plusProb) (x, y, true)
+    if (BalanSiNG.rand.nextDouble < plusProb) (x, y, true)
     else (x, y, false)
 
   }
