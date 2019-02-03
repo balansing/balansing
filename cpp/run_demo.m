@@ -1,4 +1,4 @@
-%mexCompile;
+mexCompile;
 A = [0.57, 0.19; 0.19, 0.05];
 L = 12; % level
 E = 24186; % # of edges to be inserted
