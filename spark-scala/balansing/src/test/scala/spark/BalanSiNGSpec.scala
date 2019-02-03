@@ -11,14 +11,15 @@ class BalanSiNGSpec extends FlatSpec with Matchers {
     val conf = new SparkConf().setAppName("BalanSiNG-test").setMaster("local[1]")
     val sc = new SparkContext(conf)
 
-    val level = 11
-    val numEdges = 36000
+    val level = 12
+    val numEdges = 24186
     val numTasks = 1
     val A = (0.57,0.19,0.19,0.05)
-    val alpha = 0.2
+    val alpha = 0.15
     val gamma = 0.1
+    val randSeed = 0
 
-    val data = BalanSiNG.run(level,numEdges,numTasks, A, 0.0, alpha, gamma, sc).collect()
+    val data = BalanSiNG.run(level,numEdges,numTasks, A, 0.0, alpha, gamma, sc, randSeed).collect()
     val pos = data.filter(_._3 == true).map{case (x, y, _) => (x, y)}
     val neg = data.filter(_._3 == false).map{case (x, y, _) => (x, y)}
 
@@ -43,7 +44,7 @@ class BalanSiNGSpec extends FlatSpec with Matchers {
     println("Ratio of positive edges: " + pos_ratio)
     println("Ratio of negative edges: " + neg_ratio)
     println(s"Ratio of balanced triangles: $bal_ratio")
-    println(s"Ratio of negative edges: $unbal_ratio")
+    println(s"Ratio of unbalanced triangles: $unbal_ratio")
 
   }
 }
