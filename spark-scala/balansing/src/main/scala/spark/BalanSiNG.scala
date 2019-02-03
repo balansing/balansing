@@ -1,5 +1,6 @@
 package spark
 
+import helper.SignedDirectedTriangleCount
 import org.apache.log4j.Logger
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{HashPartitioner, SparkConf, SparkContext}
@@ -7,11 +8,18 @@ import org.apache.spark.{HashPartitioner, SparkConf, SparkContext}
 import scala.collection.mutable
 import scala.util.Random
 
+import org.apache.log4j.Logger
+import org.apache.log4j.Level
+
+
 object BalanSiNG {
 
   var rand: Random = _
 
   val logger: Logger = Logger.getLogger(getClass)
+
+  Logger.getLogger("org").setLevel(Level.OFF)
+  Logger.getLogger("akka").setLevel(Level.OFF)
 
   /**
     * The main entry point
@@ -25,26 +33,52 @@ object BalanSiNG {
     val numEdges = args(1).toLong
     val numTasks = args(2).toInt
     val abcd = (args(3).toDouble, args(4).toDouble, args(5).toDouble, args(6).toDouble)
-    val split_ratio = args(7).toDouble
-    val alpha = args(8).toDouble
-    val noise = args(9).toDouble
-    val output = args(10)
-    val randSeed = args(11).toInt
+    val alpha = args(7).toDouble
+    val noise = args(8).toDouble
+    val output = args(9)
+    val randSeed = args(10).toInt
 
     rand = new Random(randSeed)
 
     logger.info(f"level: $level, numEdges: $numEdges, numTasks: $numTasks, " +
       f"(a,b,c,d): $abcd")
 
-    val conf = new SparkConf().setAppName(f"[RMAT] lv: $level, E: $numEdges, abcd: $abcd") //.setMaster("local")
+    val conf = new SparkConf().setAppName(f"[BalanSiNG] lv: $level, E: $numEdges, abcd: $abcd") //.setMaster("local")
 
     val sc = new SparkContext(conf)
 
-    run(level, numEdges, numTasks, abcd, split_ratio, alpha, noise, sc, randSeed)
-      .map { case (u, v, p) => u + "\t" + v + "\t" + (if (p) "+1" else "-1") }
-      .saveAsTextFile(output)
+    val split_ratio = 0
+    val res = run(level, numEdges, numTasks, abcd, split_ratio, alpha, noise, sc, randSeed)
+
+    res.map { case (u, v, p) => u + "\t" + v + "\t" + (if (p) "+1" else "-1") }
+       .saveAsTextFile(output)
+
+    val data = res.collect()
+
+    val pos = data.filter(_._3 == true).map{case (x, y, _) => (x, y)}
+    val neg = data.filter(_._3 == false).map{case (x, y, _) => (x, y)}
+    val numTrianglesBySign = SignedDirectedTriangleCount.countTriangles(data.map{case (u, v, plus) => (u.toInt, v.toInt, plus)}.toSeq)
+
+    val balanced = numTrianglesBySign(0) + numTrianglesBySign(3) + numTrianglesBySign(5) + numTrianglesBySign(6) +
+      numTrianglesBySign(8)+ numTrianglesBySign(10)
+    val unbalanced = numTrianglesBySign(1) + numTrianglesBySign(2) + numTrianglesBySign(4) + numTrianglesBySign(9) +
+      numTrianglesBySign(7) + numTrianglesBySign(11)
+
+
+    val sign_total = (pos.size + neg.size).toDouble
+    val pos_ratio = pos.size / sign_total
+    val neg_ratio = neg.size / sign_total
+
+    val tri_total = (balanced + unbalanced).toDouble
+    val bal_ratio = balanced / tri_total
+    val unbal_ratio =  unbalanced / tri_total
 
     sc.stop()
+
+    println("Ratio of positive edges: " + pos_ratio)
+    println("Ratio of negative edges: " + neg_ratio)
+    println(s"Ratio of balanced triangles: $bal_ratio")
+    println(s"Ratio of unbalanced triangles: $unbal_ratio")
   }
 
 
