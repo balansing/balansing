@@ -1,5 +1,7 @@
 package spark
 
+import java.util.Random
+
 import org.apache.commons.math3.distribution.MultivariateNormalDistribution
 import spark.BalanSiNG.Region
 
@@ -11,8 +13,10 @@ import scala.collection.mutable
   * @param abcd the probabilities
   * @param noiseList a list of noises applied to each level
   */
-class BalanSiNGSingle(abcd: (Double, Double, Double, Double), gamma: Double, alpha: Double, noiseList: Array[Double]) {
+class BalanSiNGSingle(abcd: (Double, Double, Double, Double), gamma: Double, alpha: Double, noiseList: Array[Double],
+                      randSeed: Int) {
 
+  val rand = new Random(randSeed)
 
   private val probs = noiseList.map{ mu =>
     (abcd._1 - 2 * mu * abcd._1 / (abcd._1 + abcd._4),
@@ -51,7 +55,8 @@ class BalanSiNGSingle(abcd: (Double, Double, Double, Double), gamma: Double, alp
     var plusProb = region.plus_joint
 
     //var p = Math.random
-    var p = BalanSiNG.rand.nextDouble
+    //var p = BalanSiNG.rand.nextDouble
+    var p = rand.nextDouble
 
     for (l <- region.level to 0 by -1) {
 
@@ -82,7 +87,7 @@ class BalanSiNGSingle(abcd: (Double, Double, Double, Double), gamma: Double, alp
 
     // stochastic sign decision
     // if (Math.random < plusProb) (x, y, true)
-    if (BalanSiNG.rand.nextDouble < plusProb) (x, y, true)
+    if (rand.nextDouble < plusProb) (x, y, true)
     else (x, y, false)
 
   }

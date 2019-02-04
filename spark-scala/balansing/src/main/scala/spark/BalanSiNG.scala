@@ -115,7 +115,7 @@ object BalanSiNG {
 
     regionQueue.enqueue(Region(0, 0, numNodes - 1, numNodes - 1, numEdges, level, 1.0))
 
-    val rmat = new BalanSiNGSingle(abcd, split_ratio, alpha, noiseList.value)
+    val rmat = new BalanSiNGSingle(abcd, split_ratio, alpha, noiseList.value, randSeed)
 
     while (regionQueue.nonEmpty) {
       val region = regionQueue.dequeue
@@ -135,7 +135,7 @@ object BalanSiNG {
       .partitionBy(new HashPartitioner(numTasks))
 
     regionSlotRDD.flatMap{ case (_, x) =>
-      val l_rmat = new BalanSiNGSingle(abcd, split_ratio, alpha, noiseList.value)
+      val l_rmat = new BalanSiNGSingle(abcd, split_ratio, alpha, noiseList.value, randSeed)
       x.regions.toStream.flatMap(l_rmat.generate)
     }
 
