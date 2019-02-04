@@ -41,7 +41,7 @@ object BalanSiNG {
     rand = new Random(randSeed)
 
     logger.info(f"level: $level, numEdges: $numEdges, numTasks: $numTasks, " +
-      f"(a,b,c,d): $abcd")
+      f"(p11,m12,m21,p22): $abcd")
 
     val conf = new SparkConf().setAppName(f"[BalanSiNG] lv: $level, E: $numEdges, abcd: $abcd") //.setMaster("local")
 

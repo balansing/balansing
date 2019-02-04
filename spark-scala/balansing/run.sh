@@ -3,10 +3,10 @@
 level=12
 numEdges=24186
 numTasks=2
-a=0.57
-b=0.19
-c=0.19
-d=0.57
+p11=0.57
+m12=0.19
+m21=0.19
+p22=0.57
 alpha=0.15
 gamma=0.1
 OUTPUT=result
@@ -25,5 +25,5 @@ spark-submit --master local \
        --conf spark.network.timeout=10000000 \
        --executor-cores 1 --executor-memory 2g \
        --class spark.BalanSiNG \
-       ${JAR_PATH} $level $numEdges $numTasks $a $b $c $d $alpha $gamma $OUTPUT $randSeed
+       ${JAR_PATH} $level $numEdges $numTasks $p11 $m12 $m21 $p22 $alpha $gamma $OUTPUT $randSeed
 
