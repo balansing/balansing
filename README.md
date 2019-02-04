@@ -35,7 +35,7 @@ To run the above demo, you should install java, scala, hadoop, and spark in your
 * Spark v2.11.9
 
 In the shell, `numTasks` indicates how many tasks generate signed edges in parallel. 
-The output files are stored at `OUTPUT` (e.g., `result`). 
+The output files are stored at `OUTPUT` (e.g., `./result`). 
 You can import the project using IntelliJ with sbt. 
 
 ### How to run c++ code
