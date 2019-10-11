@@ -1,7 +1,7 @@
-# BalanSiNG: Fast and Scalable Balanced Signed Network Generator Following Real-world Properties
+# BalanSiNG: Fast and Scalable Generation of Realistic Signed Networks
 
 This repository contains codes and datasets used in the following paper:
-* BalanSiNG: Fast and Scalable Balanced Signed Network Generator Following Real-world Properties, submitted to KDD 2019.
+* BalanSiNG: Fast and Scalable Generation of Realistic Signed Networks, submitted to EDBT 2020.
 
 ## Overview
 How can we efficiently generate large-scale signed networks following real-world properties?
