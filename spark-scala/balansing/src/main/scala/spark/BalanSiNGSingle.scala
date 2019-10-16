@@ -1,10 +1,8 @@
 package spark
 
 import java.util.Random
-
 import org.apache.commons.math3.distribution.MultivariateNormalDistribution
 import spark.BalanSiNG.Region
-
 import scala.collection.mutable
 
 /**
