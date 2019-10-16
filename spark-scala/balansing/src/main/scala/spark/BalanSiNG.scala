@@ -98,7 +98,8 @@ object BalanSiNG {
   def run(level: Int, numEdges: Long, numTasks: Int,
           abcd: (Double, Double, Double, Double), split_ratio: Double, alpha: Double, noise: Double, sc: SparkContext, randSeed: Int): RDD[(Long, Long, Boolean)] = {
 
-    rand = new Random(randSeed)
+    // rand = new Random(randSeed)
+    rand = new Random()
 
     val regionQueue = new mutable.PriorityQueue[Region]()(Ordering.by(regionOrder))
     val regionSlotQueue = new mutable.PriorityQueue[RegionSlot]()(Ordering.by(regionSlotOrder))

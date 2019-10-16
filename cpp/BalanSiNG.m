@@ -12,6 +12,6 @@ N = 2^L;
 S = [1, N];
 D = [1, N];
 
-[X] = GenerateEdgesBalanSiNG(L, A, S, D, alpha, gamma, E, 0, sign_method, rand_seed);
+[X] = GenerateEdgesBalanSiNG(L, A, S, D, alpha, gamma, E, rand_seed);
 
 end
