@@ -66,21 +66,21 @@ class BalanSiNGSingle(abcd: (Double, Double, Double, Double), gamma: Double, alp
           y += (1L << l)
           p = (p - cumul._3) / A._4
           //(plusProb * (1 - gamma) + (1 - plusProb) * gamma) * (1 - alpha) + alpha
-          (plusProb * (1 - gamma) + (1 - plusProb) * gamma) * (alpha) + (1 - alpha)
+          (plusProb * (1 - gamma) + (1 - plusProb) * gamma) * (1 - alpha) + (alpha)
         }
         else if (p > cumul._2){
           x += (1L << l)
           p = (p - cumul._2) / A._3
-          (plusProb * gamma + (1 - plusProb) * (1 - gamma)) * (alpha) + (1 - alpha)
+          (plusProb * gamma + (1 - plusProb) * (1 - gamma)) * (1 - alpha) + (alpha)
         }
         else if (p > cumul._1){
           y += (1L << l)
           p = (p - cumul._1) / A._2
-          (plusProb * gamma + (1 - plusProb) * (1 - gamma)) * (alpha) + (1 - alpha)
+          (plusProb * gamma + (1 - plusProb) * (1 - gamma)) * (1 - alpha) + (alpha)
         }
         else{
           p = p / A._1
-          (plusProb * (1 - gamma) + (1 - plusProb) * gamma) * (alpha) + (1 - alpha)
+          (plusProb * (1 - gamma) + (1 - plusProb) * gamma) * (1 - alpha) + (alpha)
         }
 
     }
