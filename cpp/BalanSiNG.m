@@ -1,3 +1,4 @@
+
 function [X] = BalanSiNG(L, E, A, alpha, gamma)
 % L: target recursion depth |V| = 2^L
 % E: target number of edges

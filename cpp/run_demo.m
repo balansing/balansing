@@ -5,7 +5,6 @@ E = 24186; % # of edges to be inserted
 alpha = 0.85; % weight parameter % to be changes
 gamma = 0.1; % noise parameter
 
-
 [X] = BalanSiNG(L, E, A, alpha, gamma);
 
 balanced_idx = [0, 3, 5, 6, 8, 10] + 1;

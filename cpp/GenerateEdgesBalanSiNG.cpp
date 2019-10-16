@@ -16,6 +16,7 @@ std::random_device rd;
 std::default_random_engine rng(rd());
 std::uniform_real_distribution<double> uni_real(0.0, 1.0);
 
+
 class Edge{
 public:
     long s;
@@ -27,6 +28,7 @@ public:
         this->sign = _sign;
     }
 };
+
 
 void gamma_split(vector<double>& a, vector<double>& p, vector<double>& m, double r)
 {
